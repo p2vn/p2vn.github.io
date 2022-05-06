@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="1 缓冲区溢出简介（堆、栈溢出）       经常听到什么栈溢出，堆溢出，其实他们都属于缓冲区溢出。 根据维基百科的解释： 缓冲区溢出（buffer overflow）， 在计算机科学上是指针对程序设计缺陷，向程序输入缓冲区写入使之溢出的内容（通常是超过缓冲区能保存的最大数据量的数据），从而破坏程序运行、趁着中断之际并获取程序乃至系统的控制权。 缓冲区溢出原">
+<meta property="og:type" content="article">
+<meta property="og:title" content="栈溢出漏洞原理">
+<meta property="og:url" content="https://p2vn.github.io/2021/09/01/%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="P2un&#39;s">
+<meta property="og:description" content="1 缓冲区溢出简介（堆、栈溢出）       经常听到什么栈溢出，堆溢出，其实他们都属于缓冲区溢出。 根据维基百科的解释： 缓冲区溢出（buffer overflow）， 在计算机科学上是指针对程序设计缺陷，向程序输入缓冲区写入使之溢出的内容（通常是超过缓冲区能保存的最大数据量的数据），从而破坏程序运行、趁着中断之际并获取程序乃至系统的控制权。 缓冲区溢出原">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061331484.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061331587.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061332837.png">
+<meta property="article:published_time" content="2021-08-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-31T16:00:00.000Z">
+<meta property="article:author" content="P2un">
+<meta property="article:tag" content="缓冲区溢出">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061331484.png"><title>栈溢出漏洞原理 | P2un's</title><link ref="canonical" href="https://p2vn.github.io/2021/09/01/%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: undefined,
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">P2un's</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">栈溢出漏洞原理</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2021-09-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2021-09-01</span></span></div></header><div class="post-body">
+        <h2 id="1-缓冲区溢出简介（堆、栈溢出）"   >
+          <a href="#1-缓冲区溢出简介（堆、栈溢出）" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-缓冲区溢出简介（堆、栈溢出）" class="headerlink" title="1 缓冲区溢出简介（堆、栈溢出）"></a>1 缓冲区溢出简介（堆、栈溢出）</h2>
+      <p>经常听到什么栈溢出，堆溢出，其实他们都属于缓冲区溢出。</p>
+<p>根据维基百科的解释：</p>
+<p><strong>缓冲区溢出</strong>（buffer overflow），</p>
+<p>在<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E5%AD%B8" >计算机科学</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>上是指针对<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1" >程序设计</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>缺陷，向程序输入<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%93%E5%86%B2%E5%8C%BA" >缓冲区</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>写入使之溢出的内容（通常是超过缓冲区能保存的最大数据量的数据），从而破坏程序运行、趁着中断之际并获取程序乃至系统的控制权。</p>
+<p>缓冲区溢出原指当某个数据超过了处理程序回传堆栈地址限制的范围时，程序出现的异常操作。</p>
+<p>对于初学者，要完全理解这段解释，还需要对寄存器，内存，缓冲区，代码执行机制有一定的了解。</p>
+<p>下面我就尝试以一个通俗易懂的角度解释上述内容。</p>
+<p>.</p>
+<p>.</p>
+
+        <h2 id="2-内存"   >
+          <a href="#2-内存" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-内存" class="headerlink" title="2 内存"></a>2 内存</h2>
+      <p>一段代码被执行的时候，一定会使用到内存来存放数据。</p>
+<p>拿 C 语言来举例，对于一个普通的 C 语言程序, 它的内存由 5 个部分（Segment）组成， 每一个部分都有不同的用途。</p>
+<p>为了更加完整一点，我又多画了一个 Kernel 内核区</p>
+<p>如下图：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061331484.png" alt="image-20220220152046607"></p>
+<p>.</p>
+<p><strong>每个部分的解释：</strong></p>
+<ul>
+<li><p>Text 代码区：</p>
+<ul>
+<li>存放程序的可执行代码。这一内存块通常是只读的。</li>
+</ul>
+</li>
+<li><p>Data 数据区：</p>
+<ul>
+<li>存放已经初始化值了的静态变量和全局变量</li>
+</ul>
+</li>
+<li><p>Bss 区：</p>
+<ul>
+<li>存放未被初始化值的静态变量和全局变量。系统会把这部分存放的值都用 0 来储存。</li>
+</ul>
+</li>
+<li><p>Heap 堆内存：</p>
+<ul>
+<li>用于动态分配内存分配，在 C 语言中，堆内存由 malloc()、calloc()、realloc()、free() 管理。意思就是使用这些函数的地方，其数据都会被保存在堆内存</li>
+<li>如果是有引用类型的变量，总是会放在堆内存中的</li>
+<li>还有一点值得注意的，堆内存的增长方向和内存地址增长方向是一样的</li>
+</ul>
+</li>
+<li><p><strong>Stack 栈内存：</strong></p>
+<ul>
+<li><p>存放函数内定义的局部变量，以及和函数调用相关的数据（实参，函数返回地址）</p>
+</li>
+<li><p>关键点：</p>
+<p> 栈内存的增长方向和内存地址的增长方向正相反，这么设计的原因是，假如栈内存的增长方向和内存地址的增长方向一样，那么假如栈内存的栈顶在内存地址的较高地址处，随着栈内存的增长，很容易就会造成内存溢出。而如果像现在这样，栈内存和内存地址的增长方向相对，那么就可以一定程度上避免内存溢出。</p>
+</li>
+</ul>
+</li>
+<li><p>Kernel 内核区：</p>
+<ul>
+<li>主要用来存放从命令行调用程序时传入的参数，以及某些环境变量</li>
+</ul>
+</li>
+</ul>
+<p>.</p>
+<p>.</p>
+
+        <h2 id="3-栈内存"   >
+          <a href="#3-栈内存" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-栈内存" class="headerlink" title="3 栈内存"></a>3 栈内存</h2>
+      <p>那么经过上图的理解，对缓冲区溢出有了进一步的认识了吧。可以简单地理解缓冲区就是内存里放数据的地方，然后缓冲区包括栈内存和堆内存，当栈内存或者堆内存储存的数据过大，超越了边界，就造成了缓冲区溢出。</p>
+<p>虽然缓冲区溢出分为堆溢出和栈溢出，但在此篇文章我们重点讲解 <strong>栈溢出</strong></p>
+<p>要讲清楚栈溢出，首先更加了解栈内存结构</p>
+<p>如下图：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061331587.png" alt="image-20220220215022859"></p>
+<p>.</p>
+<p>这是一段有栈内存空间存储数据的代码的栈内存结构图</p>
+<p>对于其中的内容我们一一解释：</p>
+<ul>
+<li><p>首先是最上面的 Parent rountine ‘ s stack ，即父进程（线程）的栈。它保存着上一个被调用的函数的数据，最基础的比如 Function （方法），Parameters （参数）。</p>
+</li>
+<li><p>然后是 Return address ，即返回地址。要知道每个函数被调用之后，执行完功能，都必须返回（无论有没有返回值）。那么返回到什么地方，就由这个 返回地址 来标明。</p>
+</li>
+<li><p>接下来是 EBP 值，实际上 EBP 是寄存器存放当前线程的栈底指针。而在栈内存中，EBP 值就是一段地址数据，会被 寄存器 EBP 记录，所以直接就叫做 EBP 值。</p>
+<p>从这里开始，就可以算作是新栈（子线程或者新函数）的开始点了</p>
+</li>
+<li><p>Buffer 缓冲区，这里直接放个缓冲区其实是有点突兀的。因为我没有在前面写清楚代码，所以在这补充一下：之所以这里有一个 Buffer 缓冲区，是因为我为了说明缓冲区溢出，假定了代码中有一个使用到缓冲区的部分，所以才会在这里出现缓冲区 Buffer。</p>
+<p>此外，还需要注意一点的是，缓冲区中数据流入的方向和内存地址增长方向相同。如上图所标</p>
+</li>
+<li><p>最后是 ESP 值，原本也是指寄存器的一种。ESP 寄存器存放当前线程的栈顶指针，在栈内存这里就表示栈顶的值。栈顶部是内存地址较小的区域，圧入栈的数据越多，ESP值也就越来越小</p>
+</li>
+</ul>
+<p>补充：</p>
+<ul>
+<li>说到寄存器，就要稍微提一下那几个 E 开头的东西（ESP，EBP，EIP）。首先要知道 E 开头表示是 32 位系统的寄存器，64 位的寄存器是 R 开头的</li>
+<li>前面讲了 EBP，ESP。还有一个比较关键的寄存器 EIP 没介绍：<ul>
+<li>EIP：寄存器存放下一个CPU指令存放的内存地址，当CPU执行完当前的指令后，从EIP寄存 器中读取下一条指令的内存地址，然后继续执行。</li>
+</ul>
+</li>
+</ul>
+<p>.</p>
+<p>.</p>
+
+        <h2 id="4-栈溢出漏洞原理"   >
+          <a href="#4-栈溢出漏洞原理" class="heading-link"><i class="fas fa-link"></i></a><a href="#4-栈溢出漏洞原理" class="headerlink" title="4 栈溢出漏洞原理"></a>4 栈溢出漏洞原理</h2>
+      <p>结合前面缓冲区溢出的概念，以及栈内存结构，那么栈溢出漏洞的原理也不难。</p>
+<p>首先要制造溢出，在栈内存结构图中我说明了 Buffer 缓冲区的数据增长方向，是和内存地址增长方向相同的。也就是随着数据的增长，会慢慢溢出，覆盖 EBP 值，然后覆盖到 Return Address 返回地址。而覆盖返回地址，并将其中的值填充成我们要的目标地址的值。</p>
+<p>这么做的原因是，前面我们说过当函数执行完毕后，会根据 Return Address 中的返回地址值返回到某个特定的位置，然后再从那个位置继续执行代码。那么如果这个地址可以被我们自由操作，只需要将其改成我们 shellcode 的地址值，不就任意代码执行了吗？</p>
+<p>.</p>
+<p>那么这个 shellcode 的地址值要怎么写？或者说要怎么才能准确的知道 shellcode 的内存地址值？</p>
+<p>甚至说 shellcode 要怎么写？写在哪？</p>
+<p>.</p>
+<p>解答：</p>
+<ul>
+<li><p>shellcode 要写在哪？怎么写?</p>
+<p>由于我们从一开始就只能控制写入缓冲区中的数据，因此 shellcode 一定是写在缓冲区中的，而且一定是在 目标返回地址 的前面。总的来说，shellcode 应该是写在我们填入缓冲区数据的中间那部分。</p>
+<p>还有一点就是 shellcode 的形式是 16 进制的机械码，这段机械码是可以被 CPU 读懂的并且能够执行指令的。</p>
+<p>通俗来讲就是一串16进制的机器码，由CPU解释为操作指令 ，最后由内存加载执行。这些操作指令可以由工具生成，也可以自己编写，但通常我们都借助 msf 之类工具来编写。</p>
+</li>
+<li><p>Return Address 那里要填入的 shellcode 的地址值要怎么写？</p>
+</li>
+</ul>
+<p>上面说到 shellcode 是写在填入缓冲区数据的中间部分，其实可以通过一些工具查看寄存器中保存的地址来准确找到 shellcode 的地址</p>
+<p>但要每次都准确找到就有点麻烦，所以这里有个技巧。可以在填入的缓冲区数据的前半部分（在 shellcode 之前），加入 \x90 这个机器码，它的意思是继续前进去读取下一个内存地址里的数据。</p>
+<p>那么在前半部分加入了 \x90 之后，即使我们在 Return Address 部分填入 shellcode 的地址没有那么准确，也没有关系，毕竟只要落到了 \x90 这段数据中，就必然会执行到 shellcode 的位置。</p>
+<p>可以理解为下图：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205061332837.png" alt="image-20220220235243046"></p>
+<p>（红色部分是 Return Address ，被遮挡住）</p>
+<p>那么到此为止，栈溢出漏洞的原理我们已经了解了大概了，总结起来就是通过向栈中缓冲区填入有针对性修改的数据，这些数据包括 &#x2F;x90 （前半部分），shellcode （中间部分），以及最后要覆盖到 Return Address 的 shellcode 的大概范围的内存地址值（后半部分）。从而实现任意命令（代码）执行，完成攻击。</p>
+<p>.</p>
+<p>.</p>
+<p>&#x2F;</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://p2vn.github.io/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/">缓冲区溢出</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/01/windows%20access%20token/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Windows access token 介绍及利用</span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E7%AE%80%E4%BB%8B%EF%BC%88%E5%A0%86%E3%80%81%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">
+          1 缓冲区溢出简介（堆、栈溢出）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%86%85%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text">
+          2 内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A0%88%E5%86%85%E5%AD%98"><span class="toc-number">3.</span> <span class="toc-text">
+          3 栈内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">
+          4 栈溢出漏洞原理</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/rick2.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">//Try Harder//</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">Archives</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021~2022</span><span class="footer__icon"><i class="fas fa-camera-retro"></i></span><span>P2un</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
