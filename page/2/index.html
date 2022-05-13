@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="32x32"><meta property="og:type" content="website">
+<meta property="og:title" content="P2un&#39;s">
+<meta property="og:url" content="https://p2vn.github.io/page/2/index.html">
+<meta property="og:site_name" content="P2un&#39;s">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="P2un">
+<meta name="twitter:card" content="summary"><title>P2un's</title><link ref="canonical" href="https://p2vn.github.io/page/2/index.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: undefined,
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">P2un's</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/07/05/TTY%EF%BC%8CPTY%EF%BC%8CPTS%20%20,PTM%20%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%20%EF%BC%9F/">TTY、PTY、PTS、PTM 都是什么？</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2021-07-05</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2021-07-05</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><strong>详细解释：</strong></p>
+<ul>
+<li><p><strong>1、什么是终端 ( terminal ) ，这里先解释硬件终端</strong></p>
+<ul>
+<li><p>最初的计算机由于价格昂贵，因此，一台计算机一般是由多个人同时使用的。</p>
+<p>在这种情况下一台计算机需要连接上许多套键盘和显示器来供多个人使用。</p>
+<p>在以前专门有这种可以连上一台电脑的设备，只有显示器和键盘，还有简单的处理电路，本身不具有处理计算机信息的能力，他是负责连接到一台正常的计算机上（通常是通过串口） ，然后登陆计算机，并对该计算机进行操作。</p>
+<p>当然，那时候的计算机操作系统都是多任务多用户的操作系统。</p>
+<p>这样一台只有显示器和键盘能够通过串口连接到计算机的设备就叫做 <strong>终端</strong>。 （此特指硬件终端）</p>
+</li>
+</ul>
+</li>
+<li><p><strong>2、什么是控制台 ( console )，它和终端有什么联系？ （历史时期的控制台概念）</strong></p>
+<ul>
+<li><p>提到终端就不能不提控制台 console。控制台的概念与终端含义非常相近，其实现在我们经常用它们表示相同的东西，但是在计算机的早期时代，它们确实是不同的东西。</p>
+<p>学过机电的同学都知道，一些数控设备（比如数控机床 )的控制箱，通常会被称为控制台，顾名思义，控制台就是一个直接控制设备的面板，上面有很多控制按钮。</p>
+<p>在计算机里，把那套<strong>直接</strong>连接在电脑上的键盘和显示器就叫做<strong>控制台</strong>。</p>
+<p><strong>终端和控制台的区别就是：</strong></p>
+<p>终端是通过串口连接上的，不是计算机自身的设备，而控制台是计算机本身就有的设备，一个计算机只有一个控制台。</p>
+<p><strong>计算机启动的时候，所有的信息都会显示到控制台上，而不会显示到终端上。</strong></p>
+<p>这同样说明，控制台是计算机的基本设备，而终端是附加设备。</p>
+<p>计算机操作系统中，与终端不相关的信息，比如内核消息，后台服务消息，都会显示到控制台上，但不会显示到终端上。比如在启动和关闭 Linux 系统时，我们可以在控制台上看到很多的内核信息(下图来自 vSphere Client 中的 “Virtual Machine Console”)：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131653988.png" alt="image-20211209143453296"></p>
+</li>
+<li><p><strong>以上是控制台和终端的历史遗留区别。</strong></p>
+</li>
+</ul>
+</li>
+<li><p><strong>3、什么是虚拟终端（包含虚拟控制台）？</strong></p>
+<ul>
+<li><p>刚才我们解释了硬件终端，自然的就有虚拟终端。由于计算机硬件越来越便宜，通常都是一个人独占一台计算机操作，不再连接以前那种真正意义上的“硬件终端设备”了</p>
+<p>因此，终端和控制台的概念也慢慢演化了。</p>
+<p><strong>终端和控制台由硬件的概念，演化成了软件的概念。</strong></p>
+</li>
+<li><p>现在说的终端，比如 linux 中的<strong>虚拟终端</strong>，都是软件的概念，他用计算机的软件来模拟以前硬件的方式。</p>
+<p>比如在 linux 中，用 alt+f1~f6 可以切换六个虚拟终端，就好比是以前多人公用的计算机中的六个终端设备，这就是为什么这叫“虚拟终端”的原因。</p>
+</li>
+<li><p>而虚拟控制台在如今的定义简单而言就是，<strong>能直接显示系统消息的那个终端称为控制台，其他的则称为终端(控制台也是一个终端)。</strong></p>
+<p><strong>或者我们在平时的使用中压根就不区分 Linux 中的终端与控制台。</strong></p>
+<p>举个例子：</p>
+<p>首先我们按下 alt + F1 （或者 ctr + alt + F1 )进入第一个虚拟终端（即默认它为虚拟控制台 console，它的虚拟终端名也默认为 tty1 )</p>
+<p>然后打下面的命令：</p>
+<p>echo “hello world” &gt; &#x2F;dev&#x2F;console</p>
+<p>表示把 hello world 输出到 &#x2F;dev&#x2F;console 控制台上，那么 hello world 就正常地出现在 console 这个虚拟控制台 tty1 上（which is quite normal）</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131653890.png" alt="image-20211209145417882"></p>
+<p>但是如果我们 alt + F2 进入另一个虚拟终端</p>
+<p>然后同样打上一条命令，会发现，竟然在当前虚拟终端显示了 hello world</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131653514.png" alt="image-20211209145638878"></p>
+<p>.</p>
+<p>所以，在linux中，你无论在哪个虚拟终端下执行这条命令，字符hello,world都会显示在当前的虚拟终端下。也就是说，linux把当前的终端当作控制台来看待。</p>
+<p>可见，linux中已经完全淡化了控制台和终端的区别。</p>
+<p>所以，现在不必严格区分这两者的不同。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>4、什么是 TTY ？</strong></p>
+<ul>
+<li><p>从历史上看，终端（硬件终端）刚开始就是终端机，配有打印机，键盘，带有一个串口，通过串口传送数据到主机端，然后主机处理完交给终端打印出来。</p>
+<p>电传打字机(teletype)可以被看作是这类设备的统称，主要由键盘、印字机和收发报机等组成。可以输入也可以输出。因此终端也被简称为 TTY (teletype 的缩写)。</p>
+</li>
+<li><p>那么现在的 TTY 又是什么意思呢？</p>
+<p>之前我们 alt + F1-7 的时候，出来的虚拟终端名字就叫做 tty1-7 ，那么 TTY 是不是和虚拟终端是一个概念？</p>
+<p>其实是的，但是具体细节是这样的：</p>
+<p>前面我们讲随着时代发展，硬件终端逐渐变成了虚拟终端，但其实这里是怎么变成虚拟终端的，大有来头，且其中就包含了现在的 TTY 的概念。</p>
+<p>我们先回到上古时代，即使用硬件终端的年代</p>
+<p>人们通过硬件终端连接主机的底层原理概念图如下：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131653839.png" alt="image-20211209160000751"></p>
+<ul>
+<li>Terminal 就是各种各样的 teletype (指的是那个年代的电传打印机 )</li>
+<li>物理线路两边用上了Modem，就是我们常说的“猫”，暂时理解成网络连接工具</li>
+<li>UART可以理解为将teletype的信号转换成计算机能识别的信号的设备</li>
+</ul>
+<p>上面的图解释了个大概，但还有个问题，那么多厂家的 teletype ，电脑主机是如何适配的呢？</p>
+<p>于是就有了为了适配不同 teletype 而出现的 <strong>TTY 子系统</strong></p>
+<p>我们进一步扩展上面的原理概念图：</p>
+<p>Kernel 即上图 Computer 中的系统内核</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131653859.png" alt="image-20211209160540935"></p>
+<ul>
+<li>UART driver对接外面的UART设备</li>
+<li>Line discipline主要是对输入和输出做一些处理，可以理解它是TTY driver的一部分</li>
+<li>TTY driver用来处理各种终端设备（即 teletype）</li>
+<li>用户空间的进程通过TTY driver来和终端打交道</li>
+</ul>
+<p>所以，当多个终端连接主机的时候，</p>
+<p>原理概念图如下：（不再单独把 UART driver 和 Line discipline 列出来，可以认为是 TTY driver 的一部分）</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131654296.png" alt="image-20211209161220733"></p>
+<p><strong>好了，说这么多其实就像表达一个意思：</strong></p>
+<p>在上古时代，主机为了适配不同的 teletype 终端，在物理层面上设计出了 TTY 子系统。不同的终端只要有对应的 TTY 子系统就可以被主机适配，并操作主机。</p>
+<p>而到了今天，这个概念也被沿用了</p>
+<p>你想，现在我们电脑往往只有一个硬件终端（键盘和显示器），但不同的键盘不同的显示器对于同一个操作系统（主机）来说，要怎么适配呢？</p>
+<p>同样是使用 TTY 子系统这个概念，不同键盘显示器，操作系统内核都会有一个专门适配他们的 TTY 子系统。加上 linux 系统一切皆为文件的思想，这个 TTY 子系统早都被抽象为一个文件系统了，所以理论上，你想要创建一个虚拟终端，无非就是多创建一个 TTY 文件</p>
+<p>这也是为啥 TTY 也有虚拟终端的含义</p>
+<p>即通过一些虚拟化技术与 TTY 子系统即可创建出虚拟终端，所以虚拟终端也称为 TTY</p>
+<p>补充一点</p>
+<p>虚拟终端也叫做 软件仿真终端</p>
+</li>
+<li><p><strong>总结一下，到底什么是 TTY ？</strong></p>
+<ul>
+<li>具体而言应该是 TTY 子系统</li>
+<li><strong>但是现今人们对 TTY 的概念指的是 虚拟终端，或者说是 软件仿真终端</strong></li>
+</ul>
+</li>
+<li><p>此外，现在我们通过键盘显示器和操作系统交互，实际上是通过硬件终端连上虚拟终端，然后再和操作系统进行交互</p>
+<ul>
+<li>即 键盘显示器硬件终端 -- 虚拟终端 -- 操作系统</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>5、什么是 PTY？</strong></p>
+<ul>
+<li><p>即 伪终端 ，PTY &#x2F; pseudo tty &#x2F; pseudo terminal</p>
+</li>
+<li><p>为什么会出现伪终端？</p>
+<ul>
+<li><p>之前我们说的虚拟终端（软件仿真终端），它其实有一个特点，即运行于内核空间。</p>
+<p>关于这个概念不用理解太深，只需要知道它的移植性不好即可。因为虚拟终端，虽然我们说是虚拟，但是它本质上还是以来我们的键盘显示器（这类直接连接系统的硬件终端），比如我们直接从键盘输入信息，然后交给内核处理，再由内核把信息返回给显示器。</p>
+<p>这样的运行逻辑，显然是高度依赖硬件和内核的，故可移植性差</p>
+</li>
+<li><p>所以为了让虚拟终端变得更加灵活，人们就想办法把它移到用户空间（和内核空间相对）</p>
+<p>为了将虚拟终端移到用户空间，同时保持 TTY 子系统的完整，伪终端 PTY 就被发明出来了</p>
+</li>
+<li><p>移到用户空间有什么好处呢？</p>
+<p>你发现没有，之前我们说的那些虚拟终端什么的，是不是都是没有图形界面的？</p>
+<p>所以，到了上世纪80年代，随着【图形界面】的兴起，就出现某种需求——想在图形界面下使用“【文本】终端”。于是就出现了“<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Pseudoterminal" >伪终端</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>”的概念</p>
+<p><strong>通俗地说，“伪终端”就是用某个图形界面的软件来模拟传统的“文本终端”的各种行为。</strong></p>
+</li>
+</ul>
+</li>
+<li><p>哪些属于伪终端？</p>
+<p>其实日常中我们接触的大部分都是伪终端</p>
+<ul>
+<li><p>ssh等方式建立的连接是伪终端</p>
+</li>
+<li><p>什么 PUTTY，MobaXTERM，Xshell 这些连接服务器的图形界面软件。它们都为伪终端</p>
+</li>
+<li><p>平时在 linux 上打开的命令行，什么 Konsole，tmux，Qterminal，这些其实就是伪终端</p>
+</li>
+<li><p>注意：</p>
+<p>区别什么是伪终端，有些自己的经验</p>
+<p>比如要带有完整的操作交互功能（ctrl+c ，ctrl + z ）</p>
+<p>就像之前提到的稳定的 shell</p>
+<p>而类似 nc 这种连接建立的 反弹 shell 之类的，就不属于伪终端。</p>
+<p>因为 ctr + c ，nc 会断开连接，而不是像我们在本地打开伪终端再 ctrl + c 那样（只是取消操作）</p>
+<p>还有一个就是 su 命令，如果可以使用 su 命令那么至少是个伪终端</p>
+</li>
+</ul>
+</li>
+<li><p>伪终端可以用来干什么？</p>
+<ul>
+<li>最显著的用处就是可以用来远程用户登录，因为原来虚拟终端是通过硬件终端获取输入信息和通过硬件终端输出信息的，是处于“内核状态”。不可能说有别人想用这台电脑，还要到电脑面前开个虚拟终端。所以伪终端就很好地处理了这个问题，通过所谓的“用户态”从而实现了远程用户登录</li>
+<li>第二个就是图形界面，伪终端可以在图形界面中使用从而适应图形化时代。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>6、什么是 PTS ， PTM ？</strong></p>
+<ul>
+<li><p>伪终端分为主和从两个部分，与终端模拟器交互的部分是主（PTM，Pseudo TTY Master），与用户进程交互的部分是从（PTS，Pseudo TTY Master）。</p>
+</li>
+<li><p>伪终端(pseudo terminal，有时也被称为 pty)是指伪终端 master 和伪终端 slave 这一对字符设备。</p>
+<p>其中的 slave 对应 &#x2F;dev&#x2F;pts&#x2F; 目录下的一个文件，而 master 则在内存中标识为一个文件描述符(fd)。</p>
+<p>伪终端由终端模拟器提供，终端模拟器是一个运行在用户态的应用程序。</p>
+<p>Master 端是更接近用户显示器、键盘的一端，slave 端是在虚拟终端上运行的 CLI(Command Line Interface，命令行接口)程序。Linux 的伪终端驱动程序，会把 master 端(如键盘)写入的数据转发给 slave 端供程序输入，把程序写入 slave 端的数据转发给 master 端供(显示器驱动等)读取。请参考下面的示意图(此图来自互联网)：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205131658350.png" alt="image-20211209201714944"></p>
+<p>我们打开的终端桌面程序，比如 GNOME Terminal，其实是一种终端模拟软件。当终端模拟软件运行时，它通过打开 &#x2F;dev&#x2F;ptmx 文件创建了一个伪终端的 master 和 slave 对，并让 shell 运行在 slave 端。当用户在终端模拟软件中按下键盘按键时，它产生字节流并写入 master 中，shell 进程便可从 slave 中读取输入；shell 和它的子程序，将输出内容写入 slave 中，由终端模拟软件负责将字符打印到窗口中。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>.</p>
+<p>.</p>
+<hr>
+<p><strong>参考文章：</strong></p>
+<ul>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/sparkdev/p/11460821.html" >https://www.cnblogs.com/sparkdev/p/11460821.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/sparkdev/p/11605804.html" >https://www.cnblogs.com/sparkdev/p/11605804.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ltx06/article/details/52170852" >https://blog.csdn.net/ltx06/article/details/52170852</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/JunSIrhl/article/details/104374649#t17" >https://blog.csdn.net/JunSIrhl/article/details/104374649#t17</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/schaepher/p/14461553.html" >https://www.cnblogs.com/schaepher/p/14461553.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000009082089" >https://segmentfault.com/a/1190000009082089</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://my.oschina.net/u/3477605/blog/3025534" >https://my.oschina.net/u/3477605/blog/3025534</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://gangmax.me/blog/2017/02/21/what-is-tty-slash-pty-slash-pts/" >https://gangmax.me/blog/2017/02/21/what-is-tty-slash-pty-slash-pts/</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://xie.infoq.cn/article/a6153354865c225bdce5bd55e" >https://xie.infoq.cn/article/a6153354865c225bdce5bd55e</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zzdyyy/p/7538077.html" >https://www.cnblogs.com/zzdyyy/p/7538077.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+</ul>
+<p>.</p>
+<p>.</p>
+<p>&#x2F;</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/06/11/%E4%BD%BF%E7%94%A8%20Proxychains%20%E8%AE%A9%E5%90%84%E7%A7%8D%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86/">Proxychains介绍及使用</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2021-06-11</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2021-06-11</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><strong>问题：</strong></p>
+<p>当我们想使用代理访问外网的时候，开启 firefox 或者 chrome 的小圆圈，然后打开 clash 设置好全局代理之后就可以让浏览器访问任何网站都走代理。</p>
+<p>但是如果有时候我们使用扫描工具，同样下要走代理，该如何解决？</p>
+<p>不是所有工具都有小圆圈的</p>
+<p>.</p>
+<p>.</p>
+<p><strong>解决：</strong></p>
+<p>使用 proxychains4 这个工具</p>
+<ul>
+<li><p>介绍：</p>
+<p>ProxyChains是Linux和其他Unix下的代理工具。 它可以使任何程序通过代理上网， 允许TCP和DNS通过代理隧道， 支持HTTP、 SOCKS4和SOCKS5类型的代理服务器， 并且可配置多个代理。 ProxyChains通过一个用户定义的代理列表强制连接指定的应用程序， 直接断开接收方和发送方的连接。</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205091120261.png" alt="bcaad2c377db9b023ffec96942c2f83f.png"></p>
+<p>.</p>
+<p>ProxyChains 是一个强制应用<strong>的 TCP 连接</strong>通过代理的工具，支持 Tor、HTTP、与 Socks 代理。与 <span class="exturl"><a class="exturl__link"   href="https://link.zhihu.com/?target=https://qiaohong.org/2016/12/06/sshuttle-proxy-%E6%94%BB%E7%95%A5/" >sshuttle</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 不同的是，ProxyChains 只会将当前应用的 TCP 连接转发至代理，而非全局代理。</p>
+<p>（这里注意是 TCP 连接）</p>
+<p>.</p>
+<p>.</p>
+</li>
+<li><p>配置</p>
+<p>git clone 或者 apt install 安装</p>
+<p>安装完毕之后需要设置代理配置:</p>
+<p>ProxyChains 的配置文件位于 <strong>&#x2F;etc&#x2F;proxychains.conf</strong> ，打开后你需要在末尾添加你使用的代理。例如：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205091120264.png" alt="38dd38f531862dc3d34e9ac23159a43b.png"></p>
+<p>注意要先开 clash 代理，并且把协议端口都设置好</p>
+<p>配置完成之后保存，然后就开始使用了</p>
+<p>.</p>
+<p>.</p>
+</li>
+<li><p>使用</p>
+<p>ProxyChains 的使用方式非常简单，直接在应用程序前加上 proxychains4 即可。</p>
+<p>例如：</p>
+<p><strong>proxychains4 curl cip.cc</strong></p>
+<p>.</p>
+<p>注意有一些是例外：</p>
+<p>proxychains4 ping google.com</p>
+<p>因为 proxychains 只会代理 TCP 连接，而 ping 命令使用的是 ICMP 协议，所以不起作用的</p>
+</li>
+<li><p>参考链接：</p>
+<p> <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/11.html" >https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/11.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p> <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/soralaro/article/details/97614227" >https://blog.csdn.net/soralaro/article/details/97614227</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</li>
+</ul>
+</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/rick2.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">//Try Harder//</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">Archives</div></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021~2022</span><span class="footer__icon"><i class="fas fa-camera-retro"></i></span><span>P2un</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
