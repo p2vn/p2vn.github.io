@@ -259,4 +259,94 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></he
 <p> <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/soralaro/article/details/97614227" >https://blog.csdn.net/soralaro/article/details/97614227</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
 </li>
 </ul>
-</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/rick2.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">//Try Harder//</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">Archives</div></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021~2022</span><span class="footer__icon"><i class="fas fa-camera-retro"></i></span><span>P2un</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2020/11/03/linux%20%E4%B8%AD%E7%9A%84%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E3%80%81%E8%BE%93%E5%87%BA%E3%80%81%E9%94%99%E8%AF%AF/">linux 中的标准输入、输出、错误</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2020-11-03</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2020-11-03</span></span></div></header><div class="post-body"><div class="post-excerpt">
+        <h3 id="问题的产生："   >
+          <a href="#问题的产生：" class="heading-link"><i class="fas fa-link"></i></a><a href="#问题的产生：" class="headerlink" title="问题的产生："></a>问题的产生：</h3>
+      <p>是学习 find 命令时候，看到这么一串命令</p>
+<p><strong>find &#x2F;usr &#x2F;home &#x2F;tmp -name “*.jar” 2&gt;&#x2F;dev&#x2F;null</strong></p>
+<p>给的解释是：</p>
+<p>查找上面三个目录中 jar 文件，并且将所有错误消息发送到空文件，因此提供清理器输出。</p>
+<p>这意味着， 2 在命令行中代表着结果的输出，且和管道符不一样，它直接就代表着输出，那么这是为啥？让我们系统地学习标准错误、标准输出、标准输入</p>
+<p>.</p>
+
+        <h3 id="正文："   >
+          <a href="#正文：" class="heading-link"><i class="fas fa-link"></i></a><a href="#正文：" class="headerlink" title="正文："></a>正文：</h3>
+      <p><strong>几个命令行（shell）中的关键字知识：</strong></p>
+<ul>
+<li>0 表示stdin标准输入</li>
+<li>1 表示stdout标准输出</li>
+<li>2 表示stderr标准错误</li>
+<li>&#x2F;dev&#x2F;null 表示空设备文件</li>
+<li>nohub 表示放在命令开头，表示不挂起，关闭终端后，仍然运行。</li>
+<li>&amp;   表示放在命令结尾，表示后台运行，不占用终端显示。</li>
+</ul>
+<p>command &gt; &#x2F;dev&#x2F;null相当于执行了command 1 &gt; &#x2F;dev&#x2F;null。往往会把 1 给省略掉，所以这就是为什么之前一直没遇到过命令后面跟个 1 这个标准输出的情况。</p>
+<p>执行command产生了标准输出stdout(用1表示)，重定向到&#x2F;dev&#x2F;null的设备文件中。</p>
+<p>.</p>
+<p><strong>关于标准输入和输出举例：</strong></p>
+<p>在test文件夹下有a文件，没有 b 文件，此时输入以下命令：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171117384.png" alt="55809f3b10eb8bd04bdb2300e2528bbf.png"></p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171117390.png" alt="7e4827c2eae478d99c2b31dc8092f0a5.png" style="zoom: 200%;" />
+
+<p>其中 1 其实是可以省略的，执行玩命令后可以发现，目录下多了 out 文件和 err 文件，说明命令的意思是：ls -al a b 文件之后，把标准的正常的输出结果写进当前目录的 out 文件里，把 报错信息 写进当前目录的 err 文件中。</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171117400.png" alt="d953a0253360af66d1f0e2ccba32a420.png"></p>
+<p>好了，标准输出和标准错误 ok</p>
+<p>.</p>
+<hr>
+<p>了解以上后，</p>
+<p><strong>nohup command&gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</strong></p>
+<p>又代表什么？</p>
+<p>.</p>
+<p>.</p>
+<p><strong>我们把这条命令大概分解一下。</strong></p>
+<p>（1）首先，就是一个nohup表示当前用户和系统的会话下的进程忽略响应HUP消息，也就是不挂断地运行命令。</p>
+<p>（2）&amp; 符号是把该命令以后台的job的形式运行。</p>
+<p>（3）那么就剩下command&gt;&#x2F;dev&#x2F;null 2&gt;&amp;1，其中command&gt;&#x2F;dev&#x2F;null较好理解，&#x2F;dev&#x2F;null表示一个空设备，就是把 command的执行结果重定向到空设备中，说白了就是不显示任何信息。</p>
+<p>（4）最后，2&gt;&amp;1又是什么含义?</p>
+<p>.</p>
+
+        <h1 id="分析-2-gt-amp-1"   >
+          <a href="#分析-2-gt-amp-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#分析-2-gt-amp-1" class="headerlink" title="分析 2&gt;&amp;1"></a>分析 2&gt;&amp;1</h1>
+      <p>对于2&gt;&amp;1的理解，2就是标准错误，1是标准输出，那么这条命令不就是相当于把标准错误重定向到标准输出么？是的。</p>
+<p><strong>为什么是&amp;1而不是1，这里&amp; 符号是什么？&amp; 符号可以理解为引用（reference）。&amp;1 就是对标准输出的引用。</strong></p>
+<p>.</p>
+
+        <h1 id="command-gt-a-2-gt-a-与-command-gt-a-2-gt-amp-1的区别"   >
+          <a href="#command-gt-a-2-gt-a-与-command-gt-a-2-gt-amp-1的区别" class="heading-link"><i class="fas fa-link"></i></a><a href="#command-gt-a-2-gt-a-与-command-gt-a-2-gt-amp-1的区别" class="headerlink" title="command&gt;a 2&gt;a 与 command&gt;a 2&gt;&amp;1的区别"></a>command&gt;a 2&gt;a 与 command&gt;a 2&gt;&amp;1的区别</h1>
+      <p>通过上面的分析，对于command&gt;a 2&gt;&amp;1这条命令，等价于command 1&gt;a 2&gt;&amp;1。</p>
+<p>可以理解为执行command产生的标准输入重定向到文件a中，标准错误也重定向到文件a中。</p>
+<p>那么是否就说command 1&gt;a 2&gt;&amp;1等价于command 1&gt;a 2&gt;a呢？</p>
+<p>其实不是，command 1&gt;a 2&gt;&amp;1与command 1&gt;a 2&gt;a 还是有区别的，区别就在于前者只打开一次文件a，后者会打开文件两次，并导致stdout被stderr覆盖。&amp;1的含义就可以理解为用标准输出的引用，引用的就是重定向标准输出产生打开的a。<strong>从IO效率上来讲，command 1&gt;a 2&gt;&amp;1比 command 1&gt;a 2&gt;a的效率更高。</strong></p>
+<p>.</p>
+
+        <h1 id="演示一下效果"   >
+          <a href="#演示一下效果" class="heading-link"><i class="fas fa-link"></i></a><a href="#演示一下效果" class="headerlink" title="演示一下效果"></a>演示一下效果</h1>
+      <p>写一个名为 test.sh 的 shell 程序</p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171137149.png" alt="image-20220517113710125" style="zoom:150%;" />
+
+<p>其中 t 指令并不存在，执行会报错，会输出到 stderr。date 能正常执行，执行会输出当前时间，会输出到 stdout 。</p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171129137.png" alt="image-20220517112955103" style="zoom:200%;" />
+
+<p>chmod +x test.sh为test.sh增加执行权限。</p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171131098.png" alt="image-20220517113150055" style="zoom:150%;" />
+
+<p>执行 .&#x2F;test.sh &gt; test.log，如下所示：</p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171132529.png" alt="image-20220517113246505" style="zoom:150%;" />
+
+<p>我们发现 stderr 并没有被重定向到 test.log 中，stderr 直接输出到屏幕上了。</p>
+<p>执行 .&#x2F;test.sh &gt; test.log 2&gt;&amp;1，如下所示：</p>
+<img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205171133061.png" alt="image-20220517113348028" style="zoom:150%;" />
+
+<p>这次，我们发现stdout 和 stderr 都被重定向到了 test.log 中了。</p>
+<p>.</p>
+<p>.</p>
+<p>参考：</p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zhenghongxin/p/7029173.html" >https://www.cnblogs.com/zhenghongxin/p/7029173.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_25925973/article/details/92837019" >https://blog.csdn.net/qq_25925973/article/details/92837019</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/cugyangchao/article/details/6821162" >https://blog.csdn.net/cugyangchao/article/details/6821162</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/kcxg/p/11076461.html" >https://www.cnblogs.com/kcxg/p/11076461.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/kang19970201/article/details/98968271" >https://blog.csdn.net/kang19970201/article/details/98968271</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>.</p>
+<p>.</p>
+<p>&#x2F;</p>
+</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/rick2.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">//Try Harder//</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">6</div><div class="sidebar-ov-state-item__name">Archives</div></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021~2022</span><span class="footer__icon"><i class="fas fa-camera-retro"></i></span><span>P2un</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
