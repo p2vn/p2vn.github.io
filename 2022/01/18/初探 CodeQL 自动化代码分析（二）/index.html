@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/rick2.jpg?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="使用场景       之前介绍了如何使用命令行形式的coedql，也提到它的适用之处。 这篇就介绍一下如何在 Visual Studio Code  中使用 codeql 插件，对项目代码做自动化分析。 这也是大家分析代码时最常用的方法。 . .                     搭建环境与安装            和命令行工具一样，首先要下载cod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初探 CodeQL 自动化代码分析（二）">
+<meta property="og:url" content="https://p2vn.github.io/2022/01/18/%E5%88%9D%E6%8E%A2%20CodeQL%20%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="P2un&#39;s">
+<meta property="og:description" content="使用场景       之前介绍了如何使用命令行形式的coedql，也提到它的适用之处。 这篇就介绍一下如何在 Visual Studio Code  中使用 codeql 插件，对项目代码做自动化分析。 这也是大家分析代码时最常用的方法。 . .                     搭建环境与安装            和命令行工具一样，首先要下载cod">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181044019.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181045265.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181047164.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181048227.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181048410.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181049299.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181049679.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181050376.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181050065.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181052346.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181053257.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181056626.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181058293.png">
+<meta property="og:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181058943.png">
+<meta property="article:published_time" content="2022-01-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-01-17T16:00:00.000Z">
+<meta property="article:author" content="P2un">
+<meta property="article:tag" content="工具使用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181044019.png"><title>初探 CodeQL 自动化代码分析（二） | P2un's</title><link ref="canonical" href="https://p2vn.github.io/2022/01/18/%E5%88%9D%E6%8E%A2%20CodeQL%20%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: undefined,
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">P2un's</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">初探 CodeQL 自动化代码分析（二）</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2022-01-18</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2022-01-18</span></span></div></header><div class="post-body">
+        <h1 id="使用场景"   >
+          <a href="#使用场景" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用场景" class="headerlink" title="使用场景"></a><strong>使用场景</strong></h1>
+      <p>之前介绍了如何使用命令行形式的coedql，也提到它的适用之处。</p>
+<p>这篇就介绍一下如何在 Visual Studio Code  中使用 codeql 插件，对项目代码做自动化分析。</p>
+<p>这也是大家分析代码时最常用的方法。</p>
+<p>.</p>
+<p>.</p>
+
+        <h1 id="搭建环境与安装"   >
+          <a href="#搭建环境与安装" class="heading-link"><i class="fas fa-link"></i></a><a href="#搭建环境与安装" class="headerlink" title="搭建环境与安装"></a><strong>搭建环境与安装</strong></h1>
+      <ol>
+<li></li>
+</ol>
+<p>  和命令行工具一样，首先要下载codeql核心引擎，</p>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/github/codeql-cli-binaries/releases/tag/v2.7.3" >https://github.com/github/codeql-cli-binaries/releases/tag/v2.7.3</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<ol start="2">
+<li></li>
+</ol>
+<p>  然后再下载配合核心引擎的仓库</p>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/github/codeql.git" >https://github.com/github/codeql.git</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<ol start="3">
+<li></li>
+</ol>
+<p>  注意要把上面两个目录放至同级目录里</p>
+<p>  最后配置一下环境变量</p>
+<blockquote>
+<p>export PATH&#x3D;$<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://path/data/CodeQL/codeql_cli" >PATH:&#x2F;data&#x2F;CodeQL&#x2F;codeql_cli</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<ol start="4">
+<li></li>
+</ol>
+<p>  简单搭建好之后，输入以下命令验证安装成功</p>
+<blockquote>
+<p>codeql resolve languages</p>
+<p>codeql resolve qlpacks</p>
+</blockquote>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181044019.png" alt="image-20220518104448962"></p>
+<p>前面的步骤和上一篇完全一样，详情参考前文</p>
+<p>.</p>
+<p>.</p>
+
+        <h1 id="漏洞靶场代码数据库构建"   >
+          <a href="#漏洞靶场代码数据库构建" class="heading-link"><i class="fas fa-link"></i></a><a href="#漏洞靶场代码数据库构建" class="headerlink" title="漏洞靶场代码数据库构建"></a><strong>漏洞靶场代码数据库构建</strong></h1>
+      <ol>
+<li></li>
+</ol>
+<p>  在网上找到一个适合用来练习codeql的靶场项目，注意到是一个Java Project</p>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/l4yn3/micro_service_seclab.git" >https://github.com/l4yn3/micro_service_seclab.git</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> </p>
+</blockquote>
+<ol start="2">
+<li></li>
+</ol>
+<p>  克隆到本地之后使用如下命令搭建数据库</p>
+<p>  在有pom.xml的目录下：</p>
+<blockquote>
+<p>codeql database create .&#x2F;seclab-database  –language&#x3D;”java”  –command&#x3D;”mvn clean install –file pom.xml”</p>
+</blockquote>
+<p>  <strong>3.</strong></p>
+<p>  <strong>踩坑记录：</strong></p>
+<p>  如果显示fail [‘mvn’,’clean’,’install’]，则去掉–command这个参数，使用codeql内置的编译打包器进行编译打包</p>
+<p>  如果还是不行，则尝试使用项目中自带的maven，自己下载的maven环境版本太高的话很可能会出错</p>
+<p>  最后构建数据库如下：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181045265.png" alt="image-20220518104530227"></p>
+<p>.</p>
+<p>.</p>
+
+        <h1 id="使用-Visual-Studio-code-插件进行分析"   >
+          <a href="#使用-Visual-Studio-code-插件进行分析" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用-Visual-Studio-code-插件进行分析" class="headerlink" title="使用 Visual Studio code 插件进行分析"></a><strong>使用 Visual Studio code 插件进行分析</strong></h1>
+      <ol>
+<li></li>
+</ol>
+<p>  首先打开VScode，插件搜索CodeQL，然后install安装</p>
+<p>  随后配置好核心引擎的执行目录</p>
+<p>  即填codeql核心引擎安装的目录位置</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181047164.png" alt="image-20220518104742075"></p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181048227.png" alt="image-20220518104802168">  </p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181048410.png" alt="image-20220518104844352">  </p>
+<ol start="2">
+<li></li>
+</ol>
+<p>  安装好后，左上角选择FIle，打开我们的codeql仓库</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181049299.png" alt="image-20220518104925249">  </p>
+<ol start="3">
+<li></li>
+</ol>
+<p>  之后点击侧方选项框中的codeql插件按钮</p>
+<p>  在Databases模块中选择Add a CodeQL database : From a folder</p>
+<p>  然后找到刚才生成的代码数据库，选择导入</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181049679.png" alt="image-20220518104958630"></p>
+<ol start="4">
+<li></li>
+</ol>
+<p>  导入成功：注意要有打勾符号，没有的话右边选择这个数据库，并使它作为当前数据库</p>
+<p>  Set Current Database</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181050376.png" alt="image-20220518105023345"></p>
+<ol start="5">
+<li></li>
+</ol>
+<p>  再次回到刚才的Exploer，选择并查看刚刚打开的codeql仓库目录</p>
+<p>  因为这个项目是Java构建的，代码数据库刚才也是生成Java格式的</p>
+<p>  所以查询语句的使用自然是要用Java的查询语句</p>
+<p>  可以看到 仓库中的java目录下有一个ql目录，这里存放的就是大量codeql官方给出的查询语句文件</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181050065.png" alt="image-20220518105057021"></p>
+<ol start="6">
+<li></li>
+</ol>
+<p>  在ql目录下继续看，定位到src文件夹的Security&#x2F;CWE</p>
+<p>  点进去看可以发现，基本上所有的查询语句根据文件的名字就能知道是什么</p>
+<p>  比如CWE-074里的文件，JndiInjection.ql</p>
+<p>  字面上就是用来查询是否有JNDI注入查询语句</p>
+<p>  右键这个CWE-074目录，选择倒数第二个</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181052346.png" alt="image-20220518105259290"></p>
+<p>  执行结果如下：显示为没有jndi注入</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181053257.png" alt="image-20220518105331205"></p>
+<ol start="7">
+<li></li>
+</ol>
+<p>  使用CWE-089，sql注入模块来探测是否有漏洞</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181056626.png" alt="image-20220518105612591"></p>
+<p>.</p>
+<p> 探测报告：</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181058293.png" alt="image-20220518105816233"> </p>
+<p>.</p>
+<p> 的确存在，这一结果也和靶场的漏洞符合（参考github的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://readme.md/" >Readme.md</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>)</p>
+<p><img src="https://blogforp2un.oss-cn-shenzhen.aliyuncs.com/images/202205181058943.png" alt="image-20220518105859893"></p>
+<ol start="8">
+<li></li>
+</ol>
+<p>  之后就可以根据报告提供的位置，人工验证一下是否真实有注入。</p>
+<p>  毕竟codeql只是辅助，它的结果不一定就是准确的，而且使用的是官方给的查询语句，就很大可能会报错</p>
+<p>  有时候同一个数据库，同一个查询语句，最后执行的结果不一样也是存在的。</p>
+<p>  至于为什么会这样，我目前还没有太明白</p>
+<p>  后续文章会通过解析codeql查询语句原理尝试解决。</p>
+<p>.</p>
+<p>.</p>
+
+        <h1 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1>
+      <p>codeql 的VScode插件可以非常方便地辅助研究者进行代码审计，它核心的点就在于查询语句的编写，</p>
+<p>虽然官方提供了许多查询语句，但并不是每一个都适合，会出现误报等情况。</p>
+<p>所以很有必要了解查询语句编写和codeql查询原理</p>
+<p>在后面的文章我会试着探讨怎么写出合适到手项目的codeql查询文件</p>
+<p>.</p>
+<p>.</p>
+<p>.&#x2F;</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://p2vn.github.io/tags/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">工具使用</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2022/01/15/2022-01-15-%E5%88%9D%E6%8E%A2-CodeQL-%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/"><span class="paginator-prev__text">初探 CodeQL 自动化代码分析（一）</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">
+          使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">
+          搭建环境与安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E4%BB%A3%E7%A0%81%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9E%84%E5%BB%BA"><span class="toc-number">3.</span> <span class="toc-text">
+          漏洞靶场代码数据库构建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Visual-Studio-code-%E6%8F%92%E4%BB%B6%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">
+          使用 Visual Studio code 插件进行分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">
+          总结</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/rick2.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">//Try Harder//</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">8</div><div class="sidebar-ov-state-item__name">Archives</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021~2022</span><span class="footer__icon"><i class="fas fa-camera-retro"></i></span><span>P2un</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
